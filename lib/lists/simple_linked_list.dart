@@ -1,5 +1,5 @@
 void main(List<String> arguments) {
-  final list = LinkList();
+  final list = LinkList<Person>();
   print(list);
 
   list.insertFirst(Person(17, 'Barbara'));
@@ -13,27 +13,27 @@ void main(List<String> arguments) {
   print(link1);
   print(list);
 
-  final link2 = list.find(74);
+  final link2 = list.findById(74);
   print(link2);
 
-  final link3 = list.delete(74);
+  final link3 = list.deleteById(74);
   print(link3);
   print(list);
 
-  final link4 = list.find(74);
+  final link4 = list.findById(74);
   print(link4);
 
-  list.delete(12);
+  list.deleteById(12);
   print(list);
 
-  list.insertAfter(45, Person(88, 'Bob'));
+  list.insertAfterId(45, Person(88, 'Bob'));
   print(list);
 
-  list.insertAfter(10, Person(55, 'Hloe'));
+  list.insertAfterId(10, Person(55, 'Hloe'));
   print(list);
 
   list.clear();
-  list.insertAfter(45, Person(88, 'Bob'));
+  list.insertAfterId(45, Person(88, 'Bob'));
   print(list);
 }
 
@@ -47,72 +47,80 @@ class Person {
   String toString() => '{id=$id,name=$name}';
 }
 
-class _Link<E> {
-  final E item;
-  _Link<E>? nextLink; // next link in list
+class _Link<Person> {
+  final Person person;
+  _Link? nextLink; // next link in list
 
-  _Link(this.item, [this.nextLink]);
+  _Link(this.person, [this.nextLink]);
 
   @override
-  String toString() => item.toString();
+  String toString() => person.toString();
 }
 
-class LinkList<E> {
+class LinkList<Person> {
   _Link? _firstLink; // first link on list
+  int _length = 0;
 
   bool get isEmpty => _firstLink == null;
 
-  void insertFirst(E item) {
-    final link = _Link(item, _firstLink);
+  int get length => _length;
+
+  void insertFirst(Person person) {
+    final link = _Link(person, _firstLink);
     _firstLink = link;
+    _length++;
   }
 
-  E? deleteFirst() {
+  Person? deleteFirst() {
     if (isEmpty) return null;
     final firstLink = _firstLink;
     _firstLink = firstLink?.nextLink;
-    return firstLink?.item;
+    _length--;
+    return firstLink?.person;
   }
 
-  E? find(int id) {
+  Person? findById(int id) {
     if (isEmpty) return null;
     _Link? currentLink = _firstLink;
     while (currentLink != null) {
-      if (currentLink.item.id == id) return currentLink.item;
+      if (currentLink.person.id == id) return currentLink.person;
       currentLink = currentLink.nextLink;
     }
     return null;
   }
 
-  void insertAfter(int afterId, E item) {
+  void insertAfterId(int afterId, Person person) {
     if (isEmpty) {
-      insertFirst(item);
+      insertFirst(person);
       return;
     }
     _Link? prevLink = _firstLink;
     _Link? currentLink = _firstLink;
     while (currentLink != null) {
-      if (currentLink.item.id == afterId) {
-        final link = _Link(item, currentLink.nextLink);
+      if (currentLink.person.id == afterId) {
+        final link = _Link(person, currentLink.nextLink);
         currentLink.nextLink = link;
+        _length++;
         return;
       }
       prevLink = currentLink;
       currentLink = currentLink.nextLink;
     }
     // add at the end if is no matches
-    prevLink?.nextLink = _Link(item);
+    prevLink?.nextLink = _Link(person);
+    _length++;
   }
 
-  E? delete(int id) {
+  Person? deleteById(int id) {
     if (isEmpty) return null;
-    if (_firstLink?.item.id == id) return deleteFirst();
+    if (_firstLink?.person.id == id) return deleteFirst();
     _Link? prevLink = _firstLink;
     _Link? currentLink = _firstLink?.nextLink;
     while (currentLink != null) {
-      if (currentLink.item.id == id) {
+      if (currentLink.person.id == id) {
         prevLink?.nextLink = currentLink.nextLink;
-        return currentLink.item;
+        _length--;
+        return currentLink.person;
       }
       prevLink = currentLink;
       currentLink = currentLink.nextLink;
@@ -120,7 +128,10 @@ class LinkList<E> {
     return null;
   }
 
-  void clear() => _firstLink = null;
+  void clear() {
+    _firstLink = null;
+    _length = 0;
+  }
 
   @override
   String toString() {
