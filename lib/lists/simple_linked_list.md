@@ -1,18 +1,18 @@
 # Simple Linked List / Простой связанный список
 
-![img](img/linked_list_simple.png)
+![img](../../img/linked_list_simple.png)
 
 # Метод insertFirst()
 Чтобы вставить в список новый элемент, достаточно присвоить
 полю next созданного объекта ссылку на предыдущий первый элемент, а затем изменить поле first так, чтобы оно указывало на только что вставленный элемент.
 
-![img](img/linked_list_simple_insert_first.png)
+![img](../../img/linked_list_simple_insert_first.png)
 
 # Метод deleteFirst()
 Он отсоединяет
 первый элемент, для чего в поле first заносится ссылка на второй элемент (который находится по значению поля next в первом элементе).
 
-![img](img/linked_list_simple_delete_first.png)
+![img](../../img/linked_list_simple_delete_first.png)
 
 # Метод find()
 Ссылка current, изначально содержащая указатель first, перебирает ссылки по цепочке, для чего ей многократно присваивается current.next. Для
@@ -27,4 +27,4 @@
 из-за того, что при удалении текущего элемента метод должен связать предыдущий
 элемент со следующим. Чтобы обратиться к предыдущему элементу, необходимо сохранить ссылку на него.
 
-![img](img/linked_list_simple_delete.png)
+![img](../../img/linked_list_simple_delete.png)
